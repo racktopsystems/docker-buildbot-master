@@ -1,0 +1,29 @@
+#!/bin/bash
+
+cd /app
+
+echo "Setting up environment..."
+
+if [ ! -f "data/master.cfg" ]; then
+  cp master/master.cfg.sample data/master.cfg
+fi
+
+if [ ! -f "master/original.sqlite" ]; then
+  mv master/state.sqlite master/original.sqlite
+fi
+
+if [ ! -f "data/master.sqlite" ]; then
+  cp master/original.sqlite data/master.sqlite
+fi
+
+rm -f master/state.sqlite
+ln -s /app/data/master.sqlite master/state.sqlite
+
+echo "Starting BuildBot..."
+
+if [ ! -f "data/master.cfg" ]; then
+  echo "ERROR: Please provide a config file."
+  exit -1
+fi
+
+buildbot start --nodaemon master
