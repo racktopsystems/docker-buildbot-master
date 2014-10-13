@@ -11,7 +11,7 @@ Create data container:
 
 Run the BuildBot master:
 
-```docker run -d --volumes-from buildbot-data --name buildbot boxbox/buildbot-master```
+```docker run -d --volumes-from buildbot-data -p 8010:8010 -p 9989:9989 --name buildbot boxbox/buildbot-master```
 
 ## Host volume mount
 
@@ -21,7 +21,7 @@ Create the data directory:
 
 Run the BuildBot master:
 
-```docker run -d -v ~/buildbot-data:/app/data --name buildbot boxbox/buildbot-master```
+```docker run -d -v ~/buildbot-data:/app/data -p 8010:8010 -p 9989:9989 --name buildbot boxbox/buildbot-master```
 
 # Database and configuration
 
