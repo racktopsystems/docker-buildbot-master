@@ -1,29 +1,14 @@
 #!/bin/bash
 
+mkdir -p /app/data
 cd /app
 
-echo "Setting up environment..."
+if [ ! -d "data/master" ]; then
+  buildbot create-master data/master
+  mv data/master/master.cfg.sample data/master/master.cfg
 
-if [ ! -f "data/master.cfg" ]; then
-  cp master/master.cfg.sample data/master.cfg
+  echo "Configuration file has been created in /app/data/master.cfg."
+  echo "Please adjust the file to your likings and restart this container."
+else
+  buildbot start --nodaemon data/master
 fi
-
-if [ ! -f "master/original.sqlite" ]; then
-  mv master/state.sqlite master/original.sqlite
-fi
-
-if [ ! -f "data/master.sqlite" ]; then
-  cp master/original.sqlite data/master.sqlite
-fi
-
-rm -f master/state.sqlite
-ln -s /app/data/master.sqlite master/state.sqlite
-
-echo "Starting BuildBot..."
-
-if [ ! -f "data/master.cfg" ]; then
-  echo "ERROR: Please provide a config file."
-  exit -1
-fi
-
-buildbot start --nodaemon master
